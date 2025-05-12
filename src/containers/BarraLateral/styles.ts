@@ -9,6 +9,10 @@ export const ContainerBotao = styled.aside`
   flex-direction: column;
   gap: 0.5rem;
   box-shadow: 8px 0 12px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 export const DivInput = styled.div`
@@ -27,4 +31,11 @@ export const Input = styled.input`
   border: none;
   text-align: left;
   outline: none;
+`
+
+export const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  align-items: center;
 `

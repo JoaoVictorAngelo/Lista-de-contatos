@@ -14,6 +14,7 @@ export const BotaoFiltro = styled.button<PropsSemTipoEContador>`
   font-size: 1rem;
   display: flex;
   align-items: center;
+  margin: 5px;
   justify-content: space-between;
   cursor: pointer;
   transition: background-color 0.2s;

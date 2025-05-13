@@ -8,7 +8,6 @@ export const ContainerBotao = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  box-shadow: 8px 0 12px rgba(0, 0, 0, 0.3);
 
   @media (max-width: 768px) {
     display: none;

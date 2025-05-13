@@ -1,45 +1,114 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
 import * as S from './style'
 import { Icon } from '../../assets/icons'
+import { remover, editar } from '../../store/reducers/contatos'
+import ContatoClass from '../../models/Contato'
+import * as enums from '../../utils/enums/TipoDeContato'
 
-type Props = {
-  nome: string
-  tag: string
-  numero: string
-  email: string
-}
+type Props = ContatoClass
 
-const Contato = ({ email, nome, numero, tag }: Props) => {
+const Contato = ({ email, nome, numero, tag, id }: Props) => {
+  const dispatch = useDispatch()
   const [favorito, setFavorito] = useState(false)
   const [estaEditando, setEstaEditando] = useState(false)
+
+  const [novoNome, setNovoNome] = useState(nome)
+  const [novaTag, setNovaTag] = useState(tag)
+  const [novoNumero, setNovoNumero] = useState(numero)
+  const [novoEmail, setNovoEmail] = useState(email)
+
+  useEffect(() => {
+    setNovoNome(nome)
+    setNovaTag(tag)
+    setNovoNumero(numero)
+    setNovoEmail(email)
+  }, [nome, tag, numero, email])
 
   const toggleFavorito = () => {
     setFavorito((prev) => !prev)
   }
 
+  const salvarEdicao = () => {
+    dispatch(
+      editar({
+        id,
+        nome: novoNome,
+        tag: novaTag,
+        numero: novoNumero,
+        email: novoEmail
+      })
+    )
+    setEstaEditando(false)
+  }
+
+  const CardEstilo = estaEditando ? 'editando' : ''
+
   return (
-    <S.Card>
+    <S.Card className={CardEstilo}>
       <S.HeaderContato>
-        <S.NomeContato>{nome}</S.NomeContato>
-        <S.IconFavorito onClick={toggleFavorito}>
-          <Icon
-            name={favorito ? 'favoritoSolido' : 'favorito'}
-            width={35}
-            height={35}
+        {estaEditando ? (
+          <input
+            type="text"
+            value={novoNome}
+            onChange={(e) => setNovoNome(e.target.value)}
           />
-        </S.IconFavorito>
+        ) : (
+          <S.NomeContato>{nome}</S.NomeContato>
+        )}
+        {!estaEditando && (
+          <S.IconFavorito onClick={toggleFavorito}>
+            <Icon
+              name={favorito ? 'favoritoSolido' : 'favorito'}
+              width={35}
+              height={35}
+            />
+          </S.IconFavorito>
+        )}
       </S.HeaderContato>
-      <S.Tag>{tag}</S.Tag>
-      <S.NumeroContato>{numero}</S.NumeroContato>
-      <S.EmailContato>{email}</S.EmailContato>
+
+      {estaEditando ? (
+        <select
+          value={novaTag}
+          onChange={(e) => setNovaTag(e.target.value as enums.TipoContato)}
+        >
+          <option value={enums.TipoContato.FAMILIA}>Família</option>
+          <option value={enums.TipoContato.TRABALHO}>Trabalho</option>
+          <option value={enums.TipoContato.AMIGOS}>Amigos</option>
+        </select>
+      ) : (
+        <S.Tag>{tag}</S.Tag>
+      )}
+
+      {estaEditando ? (
+        <input
+          type="text"
+          value={novoNumero}
+          onChange={(e) => setNovoNumero(e.target.value)}
+        />
+      ) : (
+        <S.NumeroContato>{numero}</S.NumeroContato>
+      )}
+
+      {estaEditando ? (
+        <input
+          type="email"
+          value={novoEmail}
+          onChange={(e) => setNovoEmail(e.target.value)}
+        />
+      ) : (
+        <S.EmailContato>{email}</S.EmailContato>
+      )}
+
       <S.BarraAcoes>
         {estaEditando ? (
           <>
-            <S.Botao>
+            <S.Botao onClick={salvarEdicao}>
               <Icon name="salvar" width={35} height={35} />
             </S.Botao>
             <S.Botao onClick={() => setEstaEditando(false)}>
-              <Icon name="cancelar" width={35} height={35} />
+              <Icon name="cancelar" width={31} height={31} />
             </S.Botao>
           </>
         ) : (
@@ -47,7 +116,7 @@ const Contato = ({ email, nome, numero, tag }: Props) => {
             <S.Botao onClick={() => setEstaEditando(true)}>
               <Icon name="editar" width={35} height={35} />
             </S.Botao>
-            <S.Botao>
+            <S.Botao onClick={() => dispatch(remover(id))}>
               <Icon name="remover" width={35} height={35} />
             </S.Botao>
           </>

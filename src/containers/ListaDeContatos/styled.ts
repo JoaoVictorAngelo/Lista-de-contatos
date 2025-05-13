@@ -8,6 +8,7 @@ export const ContainerDeCards = styled.main`
   max-height: 100vh;
   overflow-y: auto;
   scroll-behavior: smooth;
+  background-color: #f4f4f8;
 
   @media (max-width: 768px) {
     display: block;

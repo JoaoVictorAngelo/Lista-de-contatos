@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Card = styled.div`
+export const Card = styled.div<{ className?: string }>`
   position: relative;
   background-color: #fff;
   border-radius: 12px;
@@ -9,11 +9,44 @@ export const Card = styled.div`
   margin: 12px;
   width: 100%;
   max-width: 400px;
+  max-height: 200px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   position: relative;
 
+  &.editando {
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(255, 0, 0);
+  }
+
+  &.editando input {
+    height: 25px;
+    background-color: transparent;
+    border-radius: 8px;
+    padding-left: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+
+    &:focus {
+      border-color: #66aaff; // azul suave na borda
+      box-shadow: 0 0 4px #66aaff80; // leve glow azul (com transparência)
+    }
+  }
+
+  &.editando select {
+    height: 25px;
+    background-color: transparent;
+    border-radius: 8px;
+    padding-left: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+
+    &:focus {
+      border-color: #66aaff; // azul suave na borda
+      box-shadow: 0 0 4px #66aaff80; // leve glow azul com transparência
+    }
+  }
   @media (max-width: 768px) {
     max-width: 300px;
   }

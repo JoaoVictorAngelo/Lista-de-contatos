@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 
-import { Props } from '.'
+type Props = {
+  $ativo: boolean
+}
 
-type PropsSemTipoEContador = Omit<Props, 'contador' | 'tipoDeFiltro'>
-
-export const BotaoFiltro = styled.button<PropsSemTipoEContador>`
+export const BotaoFiltro = styled.button<Props>`
   background-color: ${(props) => (props.$ativo ? '#2b2b40' : 'transparent')};
   border: none;
   color: #ffffff;
@@ -28,6 +28,7 @@ export const Contador = styled.span`
   background-color: #3b3b5c;
   color: #ffffff;
   padding: 0.2rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 8px;
   font-size: 0.875rem;
+  margin-left: 5px;
 `

@@ -88,9 +88,15 @@ const contatosSlice = createSlice({
       if (index >= 0) {
         state.itens[index] = action.payload
       }
+    },
+    alternarFavorito: (state, action: PayloadAction<number>) => {
+      const index = state.itens.findIndex((c) => c.id === action.payload)
+      if (index >= 0) {
+        state.itens[index].favorito = !state.itens[index].favorito
+      }
     }
   }
 })
 
-export const { remover, editar } = contatosSlice.actions
+export const { remover, editar, alternarFavorito } = contatosSlice.actions
 export default contatosSlice.reducer

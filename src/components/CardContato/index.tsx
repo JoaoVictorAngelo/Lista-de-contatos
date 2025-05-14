@@ -3,15 +3,20 @@ import { useDispatch } from 'react-redux'
 
 import * as S from './style'
 import { Icon } from '../../assets/icons'
-import { remover, editar } from '../../store/reducers/contatos'
+
+import {
+  remover,
+  editar,
+  alternarFavorito
+} from '../../store/reducers/contatos'
 import ContatoClass from '../../models/Contato'
 import * as enums from '../../utils/enums/TipoDeContato'
 
 type Props = ContatoClass
 
-const Contato = ({ email, nome, numero, tag, id }: Props) => {
+const Contato = ({ email, nome, numero, tag, id, favorito }: Props) => {
   const dispatch = useDispatch()
-  const [favorito, setFavorito] = useState(false)
+
   const [estaEditando, setEstaEditando] = useState(false)
 
   const [novoNome, setNovoNome] = useState(nome)
@@ -26,8 +31,8 @@ const Contato = ({ email, nome, numero, tag, id }: Props) => {
     setNovoEmail(email)
   }, [nome, tag, numero, email])
 
-  const toggleFavorito = () => {
-    setFavorito((prev) => !prev)
+  const handleToggleFavorito = () => {
+    dispatch(alternarFavorito(id))
   }
 
   const salvarEdicao = () => {
@@ -37,7 +42,8 @@ const Contato = ({ email, nome, numero, tag, id }: Props) => {
         nome: novoNome,
         tag: novaTag,
         numero: novoNumero,
-        email: novoEmail
+        email: novoEmail,
+        favorito: favorito
       })
     )
     setEstaEditando(false)
@@ -58,7 +64,7 @@ const Contato = ({ email, nome, numero, tag, id }: Props) => {
           <S.NomeContato>{nome}</S.NomeContato>
         )}
         {!estaEditando && (
-          <S.IconFavorito onClick={toggleFavorito}>
+          <S.IconFavorito onClick={handleToggleFavorito}>
             <Icon
               name={favorito ? 'favoritoSolido' : 'favorito'}
               width={35}

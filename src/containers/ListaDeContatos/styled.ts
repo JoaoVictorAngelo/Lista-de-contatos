@@ -1,16 +1,11 @@
 import styled from 'styled-components'
 
-export const ContainerDeCards = styled.main`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+export const ContainerDeCards = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   gap: 16px;
-  padding: 24px;
-  max-height: 100vh;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  background-color: #f4f4f8;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 16px;
 `

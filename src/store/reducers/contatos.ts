@@ -63,13 +63,6 @@ const initialState: ContatosState = {
       numero: '(19) 9 9999-2222',
       email: 'teste8@teste.com',
       id: 2
-    },
-    {
-      nome: 'Marcia Patroa',
-      tag: enums.TipoContato.TRABALHO,
-      numero: '(19) 9 9999-1111',
-      email: 'teste9@teste.com',
-      id: 3
     }
   ]
 }
@@ -89,14 +82,41 @@ const contatosSlice = createSlice({
         state.itens[index] = action.payload
       }
     },
+    cadastrar: (state, action: PayloadAction<Contato>) => {
+      // Garantir que o ID seja único
+      const novoContato = action.payload
+      // Verificar se o ID já existe (improvável com timestamp, mas por segurança)
+      const idExistente = state.itens.some(
+        (contato) => contato.id === novoContato.id
+      )
+      if (idExistente) {
+        // Se por algum motivo o ID já existir, gerar um novo
+        novoContato.id = new Date().getTime() + Math.floor(Math.random() * 1000)
+      }
+      state.itens.push(novoContato)
+    },
     alternarFavorito: (state, action: PayloadAction<number>) => {
-      const index = state.itens.findIndex((c) => c.id === action.payload)
+      // Converter para número para garantir comparação correta
+      const idParaAlterar = Number(action.payload)
+
+      // Encontrar o contato específico pelo ID
+      const index = state.itens.findIndex(
+        (contato) => Number(contato.id) === idParaAlterar
+      )
+
+      // Se encontrou o contato, alternar o favorito apenas para ele
       if (index >= 0) {
-        state.itens[index].favorito = !state.itens[index].favorito
+        // Criar uma cópia do estado atual para evitar mutações indesejadas
+        const contatoAtualizado = { ...state.itens[index] }
+        // Alternar o valor de favorito
+        contatoAtualizado.favorito = !contatoAtualizado.favorito
+        // Atualizar o contato no array
+        state.itens[index] = contatoAtualizado
       }
     }
   }
 })
 
-export const { remover, editar, alternarFavorito } = contatosSlice.actions
+export const { remover, editar, cadastrar, alternarFavorito } =
+  contatosSlice.actions
 export default contatosSlice.reducer
